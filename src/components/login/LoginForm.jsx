@@ -1,12 +1,8 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import "../signup/signupform.css";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, goggleAuthProvider } from "../../firebase.config";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import SvgComponent from "../SvgComponent";
 import axios from "axios";
-import cookie from "react-cookies";
 import { setCSRFToken } from '../../csrfToken';
 
 const SignupForm = () => {
@@ -14,7 +10,6 @@ const SignupForm = () => {
   const [loginPassword, setLoginPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showLoginPassword, setShowLoginPassword] = useState(true);
-
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogin = async (e) => {

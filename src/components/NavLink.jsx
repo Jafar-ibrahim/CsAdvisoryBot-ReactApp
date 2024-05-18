@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase.config";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const NavLinks = ({ svg, link, text, setChatLog ,setShowMenu}) => {
   const { dispatch } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   const handleClick = async (text) => {
     if (text === "Clear Conversation") {
@@ -14,15 +14,18 @@ const NavLinks = ({ svg, link, text, setChatLog ,setShowMenu}) => {
     }
     if (text === "Log out") {
       try {
-        let logOut = await signOut(auth);
-        console.log("logOut", logOut);
+        await logout();
         dispatch({ type: "LOGOUT" });
       } catch (error) {
         console.log("error happen during sign out", error);
       }
     }
   };
-
+  const logout = async () => {
+    await axios.post('http://localhost:8000/chat/logout', JSON.stringify({
+      user: currentUser
+    }));
+  };
   return (
     <Link
       to={link}

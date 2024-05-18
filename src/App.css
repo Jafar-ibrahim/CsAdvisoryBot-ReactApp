@@ -275,10 +275,9 @@ nav svg {
   position: relative;
   transform: translate(-50%, -50%);*/
   width: 90%;
-  height: 100%;
   min-height: 55px;
-  /*max-height: 200px;
-  height: 55px;*/
+  /*max-height: 200px;*/
+  height: 55px;
   background-color: #41414e;
   border-radius: 5px;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);

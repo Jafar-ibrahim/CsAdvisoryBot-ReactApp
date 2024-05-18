@@ -8,6 +8,8 @@ import NavContent from "../components/NavContent";
 import {AuthContext} from "../context/AuthContext";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import VoiceRecorderButton from "../components/VoiceRecorderButton";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
 import axios from "axios";
 
 const Home = () => {
@@ -16,28 +18,20 @@ const Home = () => {
   const [chatLog, setChatLog] = useState([]);
   const [err, setErr] = useState(false);
   const [responseFromAPI, setResponseFromAPI] = useState(false);
-  const { currentUser } = useContext(AuthContext);
   const chatLogRef = useRef(null);
   const textAreaRef = useRef(null);
   const formRef = useRef(null);
   const [isTextAreaDisabled, setIsTextAreaDisabled] = useState(false);
-
-  /*useEffect(() => {
-    const textArea = textAreaRef.current;
-    textArea.style.height = 'auto'; // Reset height
-    textArea.style.height = `${textArea.scrollHeight}px`; // Set height to scrollHeight
-
-    // Adjust the textarea's position
-    const height = textArea.scrollHeight;
-    textArea.style.marginBottom = `-${height}px`; // Move the textarea upward by its height
-  }, [inputPrompt]);*/
+  const endOfChatLogRef = useRef(null);
   const onEnterPress = (e) => {
     if(e.keyCode === 13 && e.shiftKey === false) {
       setIsTextAreaDisabled(true);
       handleSubmit(e);
     }
   }
+
   const handleSubmit = (e) => {
+    console.log("submitting form")
     e.preventDefault();
 
     if (!responseFromAPI) {
@@ -52,7 +46,6 @@ const Home = () => {
       }
 
       async function callAPI() {
-        console.log('after : ', axios.defaults.headers.common['X-CSRFToken'])
         try {
           const response = await axios.post("http://localhost:8000/chat/", JSON.stringify({
             userinput: inputPrompt,
@@ -71,16 +64,21 @@ const Home = () => {
           ]);
           setErr(false);
           setIsTextAreaDisabled(false);
+
+          // Scroll to the bottom of the chat log
+          endOfChatLogRef.current?.scrollIntoView({ behavior: "smooth" });
         } catch (err) {
           setErr(err);
           console.log(err);
         }
-        //Set responseFromAPI back to false after the fetch request is complete
         setResponseFromAPI(false);
       }
+
+      setInputPrompt("");
     }
 
-    setInputPrompt("");
+    // Scroll to the bottom of the chat log
+    endOfChatLogRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -154,63 +152,64 @@ const Home = () => {
           <div className="chatLogWrapper">
             {chatLog.length > 0 &&
               chatLog.map((chat, idx) => (
-                <div
-                  className="chatLog"
-                  key={idx}
-                  ref={chatLogRef}
-                  id={`navPrompt-${chat.chatPrompt.replace(
-                    /[^a-zA-Z0-9]/g,
-                    "-"
-                  )}`}
-                >
-                  <div className="chatPromptMainContainer">
-                    <div className="chatPromptWrapper">
-                      <Avatar bg="#5437DB" className="userSVG">
-                        <svg
-                          stroke="currentColor"
-                          fill="none"
-                          strokeWidth={1.9}
-                          viewBox="0 0 24 24"
-                          // strokeLinecap="round"
-                          // strokeLinejoin="round"
-                          className="h-6 w-6"
-                          height={40}
-                          width={40}
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                          <circle cx={12} cy={7} r={4} />
-                        </svg>
-                      </Avatar>
-                      <div id="chatPrompt">{chat.chatPrompt}</div>
+                  <div
+                      className="chatLog"
+                      key={idx}
+                      ref={chatLogRef}
+                      id={`navPrompt-${chat.chatPrompt.replace(
+                          /[^a-zA-Z0-9]/g,
+                          "-"
+                      )}`}
+                  >
+                    <div className="chatPromptMainContainer">
+                      <div className="chatPromptWrapper">
+                        <Avatar bg="#5437DB" className="userSVG">
+                          <svg
+                              stroke="currentColor"
+                              fill="none"
+                              strokeWidth={1.9}
+                              viewBox="0 0 24 24"
+                              // strokeLinecap="round"
+                              // strokeLinejoin="round"
+                              className="h-6 w-6"
+                              height={40}
+                              width={40}
+                              xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx={12} cy={7} r={4}/>
+                          </svg>
+                        </Avatar>
+                        <div id="chatPrompt">{chat.chatPrompt}</div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="botMessageMainContainer">
-                    <div className="botMessageWrapper">
-                      <img
-                          src="../CsAdvisoryBot-icon.png"
-                          alt="Cs Advisory Bot Logo"
-                          width="49"
-                          height="49"
-                          style={{position:"relative" ,left: -5 }}
-                      />
+                    <div className="botMessageMainContainer">
+                      <div className="botMessageWrapper">
+                        <img
+                            src="../CsAdvisoryBot-icon.png"
+                            alt="Cs Advisory Bot Logo"
+                            width="49"
+                            height="49"
+                            style={{position: "relative", left: -5}}
+                        />
 
-                      {chat.botMessage ? (
-                          <div id="botMessage">
-                            <BotResponse
-                                response={chat.botMessage}
-                                chatLogRef={chatLogRef}
-                            />
-                          </div>
-                      ) : err ? (
-                          <Error err={err}/>
-                      ) : (
-                          <Loading/>
-                      )}
+                        {chat.botMessage ? (
+                            <div id="botMessage">
+                              <BotResponse
+                                  response={chat.botMessage}
+                                  chatLogRef={chatLogRef}
+                              />
+                            </div>
+                        ) : err ? (
+                            <Error err={err}/>
+                        ) : (
+                            <Loading/>
+                        )}
+                      </div>
                     </div>
+                    <div ref={endOfChatLogRef}/>
                   </div>
-                </div>
               ))}
           </div>
         ) : (
@@ -251,7 +250,7 @@ const Home = () => {
             </div>
 
             <div className="voiceRecorderButtonWrapper">
-                <VoiceRecorderButton />
+                <VoiceRecorderButton setInputPrompt={setInputPrompt} />
             </div>
           </div>
 

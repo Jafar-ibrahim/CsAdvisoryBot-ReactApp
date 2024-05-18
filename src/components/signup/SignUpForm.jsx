@@ -1,11 +1,8 @@
 import React, { useContext, useState } from "react";
 import "./signupform.css";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, db, goggleAuthProvider } from "../../firebase.config";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import SvgComponent from "../SvgComponent";
-import { addDoc, collection } from "firebase/firestore";
 import axios from "axios";
 import { setCSRFToken } from '../../csrfToken';
 
