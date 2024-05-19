@@ -1,12 +1,15 @@
 import React from "react";
 import BotResponse from "./BotResponse";
 
-const IntroSection = () => {
+const IntroSection = ({setGlobalIsPrinting}) => {
   return (
     <div id="introsection">
       <h1>
         Introducing CS Advisory Bot
-        <BotResponse response=" - Your Ultimate AI Assistant" />
+        <BotResponse
+            response=" - Your Ultimate AI Assistant"
+            setGlobalIsPrinting={setGlobalIsPrinting}
+        />
       </h1>
       <h2>
           I am CS Advisory Bot, the dedicated chatbot for the computer science department at the King Abdullah II

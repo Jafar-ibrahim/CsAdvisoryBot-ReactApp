@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { FaMicrophone } from 'react-icons/fa';
 
-const VoiceRecorderButton = ({ setInputPrompt }) => {
+const VoiceRecorderButton = ({ setInputPrompt,textAreaRef }) => {
     const [isRecording, setIsRecording] = useState(false);
     // eslint-disable-next-line no-undef
     const recognition = new webkitSpeechRecognition();
@@ -19,10 +19,19 @@ const VoiceRecorderButton = ({ setInputPrompt }) => {
     recognition.onresult = (e) =>{
         console.log('success')
         console.log('onresult event', e);
-        recognition.stop();
+        //recognition.stop();
         const text = Array.from(e.results).map(result => result[0]).map(result => result.transcript).join('');
-        setInputPrompt(text);
-        setIsRecording(false);
+        textAreaRef.current.value = text;
+    }
+
+
+
+    recognition.onspeechend = () => {
+        recognition.stop();
+        console.log('recognition stopped');
+        setIsRecording(prevState => {
+            return false;
+        });
     }
 
     const handleButtonClick = () => {

@@ -83,9 +83,16 @@ nav {
   animation: fadeInChar 1s ease-in forwards;
   opacity: 0;
 }
+#botMessage{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
 #botMessage pre {
   margin: 0;
-  padding: 0;
+  padding-bottom: 1em;
   text-indent: 0;
   white-space: pre-wrap;
   position: relative;
@@ -211,8 +218,12 @@ nav svg {
   justify-content: left;
   /* align-items: center; */
   column-gap: 25px;
+  overflow:auto;
 }
-
+.chatPrompt{
+  width: 100%;
+  overflow: hidden;
+}
 .userSVG {
   transform: scale(0.6);
 }
@@ -229,12 +240,12 @@ nav svg {
   display: flex;
   justify-content: left;
   /* align-items: center; */
-  column-gap: 25px;
+  column-gap: .4em;
 }
 .stop-messgage {
-  position: absolute;
-  bottom: 10px;
-  right: 100px;
+  position: relative;
+  /*bottom: 10px;
+  right: 100px;*/
   width: fit-content;
   padding: 10px 15px;
   border-radius: 10%;
@@ -256,6 +267,12 @@ nav svg {
 .openaiSVG {
   transform: scale(0.5);
 }
+.botMsgIcon{
+  width: 49px;
+  height: 49px;
+  position: relative;
+  left: -5px;
+}
 #avatar {
   display: flex;
   align-items: center;
@@ -266,34 +283,55 @@ nav svg {
   object-fit: contain;
   object-position: center;
 }
-
-.inputPromptWrapper {
-  /*margin-top: 40px;
+.allInputPromptWrapper {
+  margin-top: 40px;
   left: 50%;
   right: 50%;
   bottom: 0;
   position: relative;
-  transform: translate(-50%, -50%);*/
-  width: 90%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  min-height: 55px;
+  /*max-height: 200px;
+  height: 55px;*/
+  background-color: #353540;
+  border-style: none;
+  display: flex;
+  flex-direction: row;
+}
+.inputPromptWrapper {
+  /*margin-top: 40px;
+  left: 50%;
+  right: 50%;
+  bottom: 0;*/
+  position: relative;
+  /*transform: translate(-50%, -50%);*/
+  flex: 1;
   min-height: 55px;
   /*max-height: 200px;*/
-  height: 55px;
+
   background-color: #41414e;
   border-radius: 5px;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: row;
 }
+.voiceRecorderButtonWrapper {
+  position: relative;
+  right: 0;
+  margin-left: 1em;
+  flex: .1;
+}
 .inputPromptTextarea {
   /*padding: 25px;*/
-  flex: 0.95;
+  flex: .99;
   resize: none;
   background-color: #41414e;
   color: #fff;
   font-size: 16px;
   outline: none;
   border: none;
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
   margin: 10px;
   /*width: calc(100% - 50px);
@@ -303,12 +341,15 @@ nav svg {
   white-space: pre-wrap;*/
   position: relative;
 }
+.inputForm{
+  margin-top: 2em;
+}
 form button {
-  padding: 20px;
-  flex:0.5;
+  /*padding: 20px;*/
+  flex:0.1;
   background: rgb(65, 65, 78);
   border: none;
-  position: absolute;
+  position: relative;
   right: 0;
   height: 100%;
   border-radius: 5px;
@@ -377,27 +418,9 @@ form button {
 #loginButton:hover {
   background-color: rgb(26, 127, 100);
 }
-.allInputPromptWrapper {
-  margin-top: 40px;
-  left: 50%;
-  right: 50%;
-  bottom: 0;
-  position: relative;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  min-height: 55px;
-  /*max-height: 200px;
-  height: 55px;*/
-  background-color: #353540;
-  border-style: none;
-  display: flex;
-  flex-direction: row;
-}
 
-.voiceRecorderButtonWrapper {
-    position: absolute;
-    right: 0;
-}
+
+
 /*****************************************************************/
 .voice-recorder-container {
   position: relative;
@@ -436,7 +459,7 @@ form button {
 
 .microphone-icon {
   color: white;
-  font-size: 24px;
+  font-size: .7em;
   transform: scale(1.5);
 }
 
@@ -471,22 +494,23 @@ form button {
   }
 }
 
-/*@keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: .8;
-  }
-  100% {
-    transform: translate(-60%, -50%) scale(1.2);
-    opacity: 0;
-  }
-}*/
 /******************************************************************/
 
 
-@media screen and (min-width: 768px) {
-  .inputPromptWrapper {
+@media screen and (min-width: 320px) {
+  /*.inputPromptWrapper {
     position: absolute;
+  }*/
+  .allInputPromptWrapper {
+    width: 90%;
+  }
+}
+@media screen and (min-width: 768px) {
+  /*.inputPromptWrapper {
+    position: absolute;
+  }*/
+  .allInputPromptWrapper {
+    width: 80%;
   }
 }
 
@@ -543,6 +567,9 @@ form button {
   #introsection h2 {
     font-size: 14px;
   }
+  .allInputPromptWrapper {
+    width: 70%;
+  }
 }
 
 @media screen and (min-width: 1536px) {
@@ -554,5 +581,8 @@ form button {
   }
   #loginButton {
     font-size: 22px;
+  }
+  .allInputPromptWrapper {
+    width: 60%;
   }
 }

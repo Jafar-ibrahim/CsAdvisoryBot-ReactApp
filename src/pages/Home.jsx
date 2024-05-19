@@ -20,6 +20,7 @@ const Home = () => {
   const [responseFromAPI, setResponseFromAPI] = useState(false);
   const chatLogRef = useRef(null);
   const textAreaRef = useRef(null);
+  const [globalIsPrinting, setGlobalIsPrinting] = useState(false);
   const formRef = useRef(null);
   const [isTextAreaDisabled, setIsTextAreaDisabled] = useState(false);
   const endOfChatLogRef = useRef(null);
@@ -29,7 +30,6 @@ const Home = () => {
       handleSubmit(e);
     }
   }
-
   const handleSubmit = (e) => {
     console.log("submitting form")
     e.preventDefault();
@@ -64,6 +64,7 @@ const Home = () => {
           ]);
           setErr(false);
           setIsTextAreaDisabled(false);
+          setGlobalIsPrinting(true);
 
           // Scroll to the bottom of the chat log
           endOfChatLogRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -80,6 +81,9 @@ const Home = () => {
     // Scroll to the bottom of the chat log
     endOfChatLogRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  /*useEffect(() => {
+    setGlobalIsPrinting(true);
+  }, [chatLog]);*/
 
   useEffect(() => {
     if (chatLogRef.current) {
@@ -189,9 +193,7 @@ const Home = () => {
                         <img
                             src="../CsAdvisoryBot-icon.png"
                             alt="Cs Advisory Bot Logo"
-                            width="49"
-                            height="49"
-                            style={{position: "relative", left: -5}}
+                            className={"botMsgIcon"}
                         />
 
                         {chat.botMessage ? (
@@ -199,6 +201,7 @@ const Home = () => {
                               <BotResponse
                                   response={chat.botMessage}
                                   chatLogRef={chatLogRef}
+                                  setGlobalIsPrinting={setGlobalIsPrinting}
                               />
                             </div>
                         ) : err ? (
@@ -213,10 +216,10 @@ const Home = () => {
               ))}
           </div>
         ) : (
-            <IntroSection/>
+            <IntroSection setGlobalIsPrinting={setGlobalIsPrinting}/>
         )}
 
-        <form ref={formRef} onSubmit={handleSubmit}>
+        <form ref={formRef} className={"inputForm"} onSubmit={handleSubmit}>
           <div className="allInputPromptWrapper">
             <div className="inputPromptWrapper">
               <TextareaAutosize
@@ -228,7 +231,7 @@ const Home = () => {
                   value={inputPrompt}
                   onChange={(e) => setInputPrompt(e.target.value)}
                   onKeyDown={(e) => onEnterPress(e)}
-                  disabled={isTextAreaDisabled}
+                  disabled={isTextAreaDisabled || responseFromAPI || globalIsPrinting}
                   autoFocus/>
               <button aria-label="form submit" type="submit">
                 <svg
@@ -250,7 +253,7 @@ const Home = () => {
             </div>
 
             <div className="voiceRecorderButtonWrapper">
-                <VoiceRecorderButton setInputPrompt={setInputPrompt} />
+                <VoiceRecorderButton setInputPrompt={setInputPrompt} textAreaRef={textAreaRef} />
             </div>
           </div>
 
