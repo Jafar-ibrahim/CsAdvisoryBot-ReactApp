@@ -1,8 +1,8 @@
 import "./normal.css";
 import "./App.css";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import LoginForm from "./components/login/LoginForm";
+import Home from "./components/Home";
+import AuthPage from "./components/login/AuthPage";
+import LoginPage from "./components/login/LoginPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
@@ -27,8 +27,8 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route exact path="auth/login" element={<Login />} />
-        <Route exact path="login" element={<LoginForm />} />
+        <Route exact path="auth/login" element={<AuthPage />} />
+        <Route exact path="login" element={<LoginPage />} />
       </Routes>
     </div>
   );

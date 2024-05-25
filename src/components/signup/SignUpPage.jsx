@@ -6,7 +6,7 @@ import SvgComponent from "../SvgComponent";
 import axios from "axios";
 import { setCSRFToken } from '../../csrfToken';
 
-const SignupForm = () => {
+const SignUpPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -181,4 +181,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default SignUpPage;

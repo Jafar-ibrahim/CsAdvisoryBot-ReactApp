@@ -2,7 +2,7 @@ import React from "react";
 import NavLinksContainer from "./NavLinksContainer";
 import NavPrompt from "./NavPrompt";
 
-const NavContent = ({ chatLog, setChatLog, setShowMenu }) => {
+const NavMenu = ({ chatLog, setChatLog, setShowMenu }) => {
   return (
       <>
           <h2>Chat History</h2>
@@ -26,4 +26,4 @@ const NavContent = ({ chatLog, setChatLog, setShowMenu }) => {
   );
 };
 
-export default NavContent;
+export default NavMenu;

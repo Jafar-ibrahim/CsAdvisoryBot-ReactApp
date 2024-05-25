@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import Button from "../components/Button";
-import SignupForm from "../components/signup/SignUpForm";
+import Button from "../Button";
+import SignUpPage from "../signup/SignUpPage";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = () => {
+const AuthPage = () => {
   const [isSignupFormVisible, setIsSignupFormVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -52,10 +52,10 @@ const Login = () => {
           </div>
         </div>
       ) : (
-        <SignupForm />
+        <SignUpPage />
       )}
     </>
   );
 };
 
-export default Login;
+export default AuthPage;

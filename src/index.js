@@ -8,7 +8,6 @@ import {AuthContextProvider} from "./context/AuthContext";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
 import axios from 'axios';
-import cookie from "react-cookies";
 import { setCSRFToken } from './csrfToken';
 
 axios.defaults.xsrfCookieName = 'csrftoken';

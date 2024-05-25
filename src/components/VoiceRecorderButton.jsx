@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { FaMicrophone } from 'react-icons/fa';
+import {useState} from "react";
 
 const VoiceRecorderButton = ({ setInputPrompt,textAreaRef }) => {
     const [isRecording, setIsRecording] = useState(false);

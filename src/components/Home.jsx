@@ -1,14 +1,12 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import Avatar from "../components/Avatar";
-import BotResponse from "../components/BotResponse";
-import Error from "../components/Error";
-import IntroSection from "../components/IntroSection";
-import Loading from "../components/Loading";
-import NavContent from "../components/NavContent";
-import {AuthContext} from "../context/AuthContext";
+import React, {useEffect, useRef, useState} from "react";
+import Avatar from "./Avatar";
+import BotResponse from "./BotResponse";
+import Error from "./Error";
+import IntroSection from "./IntroSection";
+import Loading from "./Loading";
+import NavMenu from "./nav/NavMenu";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import VoiceRecorderButton from "../components/VoiceRecorderButton";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import VoiceRecorderButton from "./VoiceRecorderButton";
 
 import axios from "axios";
 
@@ -63,12 +61,12 @@ const Home = () => {
             },
           ]);
           setErr(false);
-          setIsTextAreaDisabled(false);
           setGlobalIsPrinting(true);
 
           // Scroll to the bottom of the chat log
           endOfChatLogRef.current?.scrollIntoView({ behavior: "smooth" });
         } catch (err) {
+          setGlobalIsPrinting(false);
           setErr(err);
           console.log(err);
         }
@@ -81,9 +79,6 @@ const Home = () => {
     // Scroll to the bottom of the chat log
     endOfChatLogRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  /*useEffect(() => {
-    setGlobalIsPrinting(true);
-  }, [chatLog]);*/
 
   useEffect(() => {
     if (chatLogRef.current) {
@@ -120,7 +115,7 @@ const Home = () => {
       {showMenu && (
         <nav>
           <div className="navItems">
-            <NavContent
+            <NavMenu
               chatLog={chatLog}
               setChatLog={setChatLog}
               setShowMenu={setShowMenu}
@@ -144,7 +139,7 @@ const Home = () => {
       )}
 
       <aside className="sideMenu">
-        <NavContent
+        <NavMenu
           chatLog={chatLog}
           setChatLog={setChatLog}
           setShowMenu={setShowMenu}

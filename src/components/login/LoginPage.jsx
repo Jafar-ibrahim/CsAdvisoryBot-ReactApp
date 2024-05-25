@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setCSRFToken } from '../../csrfToken';
 
-const SignupForm = () => {
+const LoginPage = () => {
   const [loginUsername, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,7 +25,6 @@ const SignupForm = () => {
         const user = response.data.user;
         console.log(user)
         dispatch({ type: "LOGIN", payload: user });
-        setCSRFToken();
         navigate("/");
       } else {
         setErrorMessage(response.data.message);
@@ -35,6 +34,8 @@ const SignupForm = () => {
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
       setErrorMessage(error.message);
+    }finally {
+      setCSRFToken();
     }
   };
 
@@ -117,4 +118,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default LoginPage;
