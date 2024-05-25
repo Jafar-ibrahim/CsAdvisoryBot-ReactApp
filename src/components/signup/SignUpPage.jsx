@@ -112,7 +112,7 @@ const SignUpPage = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               id="password"
-              placeholder="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
