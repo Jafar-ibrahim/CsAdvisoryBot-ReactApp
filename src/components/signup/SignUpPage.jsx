@@ -6,9 +6,51 @@ import SvgComponent from "../SvgComponent";
 import axios from "axios";
 import { setCSRFToken } from '../../csrfToken';
 
+const validateUsername = (username) => {
+  const usernameRegex = /^[a-z]{3}[0-9]{7}$/;
+  if (!usernameRegex.test(username)) {
+    return 'Username must start with 3 lowercase letters followed by 7 digits.';
+  }
+  return '';
+};
+
+const validatePassword = (password, confirmationPassword) => {
+  if (password.length < 8) {
+    return 'Password must be at least 8 characters long.';
+  }
+  if (!/[a-z]/.test(password)) {
+    return 'Password must contain at least one lowercase letter.';
+  }
+  if (!/[A-Z]/.test(password)) {
+    return 'Password must contain at least one uppercase letter.';
+  }
+  if (!/[0-9]/.test(password)) {
+    return 'Password must contain at least one digit.';
+  }
+  if (!/[@_!#$%^&*()<>?/|}{~:]/.test(password)) {
+    return 'Password must contain at least one symbol.';
+  }
+  if (password !== confirmationPassword) {
+    return 'Passwords must match.';
+  }
+  return '';
+};
+
+const validateInput = (username, password, confirmationPassword) => {
+  let errorMessage = validateUsername(username);
+  if (errorMessage) {
+    return errorMessage;
+  }
+
+  errorMessage = validatePassword(password, confirmationPassword);
+  if (errorMessage) {
+    return errorMessage;
+  }
+
+  return '';
+};
 const SignUpPage = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmationPassword, setConfirmationPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,11 +61,14 @@ const SignUpPage = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
+    const errorMessage = validateInput(username, password, confirmationPassword);
+    if (errorMessage) {
+      setErrorMessage(errorMessage);
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:8000/chat/register', JSON.stringify({
         username: username,
-        email: email,
         password: password,
         confirmationPassword: confirmationPassword
       }));
@@ -36,12 +81,15 @@ const SignUpPage = () => {
         navigate("/");
       } else {
         setErrorMessage(response.data.message);
+        console.log('inside first catch')
       }
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
-      setErrorMessage(error.message);
+      console.log('inside second catch')
+      setErrorMessage(error.response.data.message);
+      console.log('error object :',error);
     }
   };
 
@@ -57,15 +105,6 @@ const SignUpPage = () => {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
-        />
-        <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             required
         />
         <div id="signupPassword">
